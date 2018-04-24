@@ -12,31 +12,55 @@ namespace Platformer
 {
     class Sprite
     {
-        public Vector2 offset = Vector2.Zero;
+        public Vector2 position = Vector2.Zero;
+        List<AnimatedTexture> animations = new List<AnimatedTexture>();
+        List<Vector2> animationOffsets = new List<Vector2>();
 
-        Texture2D texture;
+        int currentAnimation = 0;
+
+        SpriteEffects effects = SpriteEffects.None;
 
         public Sprite()
         {
-
         }
 
-        public void Load(ContentManager content, string asset)
+        public void Add(AnimatedTexture animation, int xOffset=0, int yOffset=0)
         {
-            texture = content.Load<Texture2D>(asset);
+            animations.Add(animation);
+            animationOffsets.Add(new Vector2(xOffset, yOffset));
         }
 
         public void Update(float deltaTime)
         {
-
+            animations[currentAnimation].UpdateFrame(deltaTime);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 position, SpriteEffects effects = SpriteEffects.None)
+        public void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
-            spriteBatch.Draw(texture, position , null, Color.White, 0, offset, 1, effects, 0);
+            animations[currentAnimation].DrawFrame(spriteBatch, position + animationOffsets[currentAnimation], effects);
         }
 
+        public void SetFlipped(bool state)
+        {
+            if (state == true)
+            {
+                effects = SpriteEffects.FlipHorizontally;
+            }
+            else
+            {
+                effects = SpriteEffects.None;
+            }
+        }
 
+        public void Pause()
+        {
+            animations[currentAnimation].Pause();
+        }
+
+        public void Play()
+        {
+            animations[currentAnimation].Play();
+        }
 
     }
 }

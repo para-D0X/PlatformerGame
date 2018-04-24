@@ -5,5 +5,14 @@
   <Config />
   <SourceFiles>
     <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/playerIdle.png</File>
+    <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/background1.png</File>
+    <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/test.tmx</File>
+    <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/tiles_spritesheet.png</File>
+    <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/kermitslurp.jpg</File>
+    <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/walk.png</File>
+    <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/walksheet.png</File>
+    <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/walksheet2.png</File>
+    <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/berlinsansfb.spritefont</File>
+    <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/heart.png</File>
   </SourceFiles>
 </SourceFileCollection>
