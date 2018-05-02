@@ -34,6 +34,10 @@ namespace Platformer
         {
             animations[currentAnimation].UpdateFrame(deltaTime);
         }
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            animations[currentAnimation].DrawFrame(spriteBatch, position + animationOffsets[currentAnimation], effects);
+        }
 
         public void Draw(SpriteBatch spriteBatch, Vector2 position)
         {
@@ -69,7 +73,7 @@ namespace Platformer
                 return new Rectangle(new Point((int)position.X, (int)position.Y), animations[currentAnimation].FrameSize);
             }
         }
-
+        // lets do this
 
     }
 }

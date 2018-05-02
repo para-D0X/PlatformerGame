@@ -51,7 +51,7 @@ namespace Platformer
         public void Load (ContentManager content)
         {
             AnimatedTexture animation = new AnimatedTexture(Vector2.Zero, 0, 1, 1);
-            animation.Load(content, "zombie", 4, 5);
+            animation.Load(content, "zombie", 1, 5);
 
             sprite.Add(animation, 16, 0);
         }
@@ -98,18 +98,19 @@ namespace Platformer
                     {
                         ddx = ddx - zombieAcceleration; // zombie wants to go left
                     }
+                    else
+                    {
+                        this.velocity.X = 0;
+                        this.moveRight = true;
+                        this.pause = 0.5f;
+                    }
                 }
-                else
-                {
-                    this.velocity.X = 0;
-                    this.moveRight = true;
-                    this.pause = 0.5f;
-                }
+                
+
+                Position = new Vector2((float)Math.Floor(Position.X + (deltaTime * velocity.X)), Position.Y);
+                velocity.X = MathHelper.Clamp(velocity.X + (deltaTime * ddx), -zombieMaxVelocity.X, zombieMaxVelocity.X);
+
             }
-
-            Position = new Vector2((float)Math.Floor(Position.X + (deltaTime * velocity.X)), Position.Y);
-            velocity.X = MathHelper.Clamp(velocity.X + (deltaTime * ddx), -zombieMaxVelocity.X, zombieMaxVelocity.X);
-
         } 
         
 

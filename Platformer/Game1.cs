@@ -226,7 +226,7 @@ namespace Platformer
             {
                 e.Draw(spriteBatch);
             }
-            coin.Draw(spriteBatch);
+            coin.Draw(spriteBatch); // YES
 
             spriteBatch.End();
 
