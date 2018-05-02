@@ -1,11 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 using MonoGame.Extended;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Graphics;
 using MonoGame.Extended.ViewportAdapters;
 using System;
+using System.Collections.Generic;
 
 namespace Platformer
 {
@@ -35,6 +37,12 @@ namespace Platformer
         int lives = 3;
 
         Texture2D heart = null;
+
+        Song gameMusic;
+
+        List<Enemy> enemies = new List<Enemy>();
+       // Sprite goal = null;
+        Sprite coin = null;
 
         public int ScreenWidth
         {
@@ -67,7 +75,7 @@ namespace Platformer
         protected override void Initialize()
         {
             player = new Player(this);
-            player.Position = new Vector2(0, 0);
+            player.Position = new Vector2(0, 0); //(360, 1200) wanted spawn location
             base.Initialize();
         }
 
@@ -102,6 +110,51 @@ namespace Platformer
                 }
             }
 
+            foreach (TiledMapObjectLayer layer in map.ObjectLayers)
+            {
+                if (layer.Name == "Enemies")
+                {
+                    foreach (TiledMapObject obj in layer.Objects)
+                    {
+                        Enemy enemy = new Enemy(this);
+                        enemy.Load(Content);
+                        enemy.Position = new Vector2(obj.Position.X, obj.Position.Y);
+                        enemies.Add(enemy);
+                    }
+                }
+
+                /*if (layer.Name == "Goal")
+                {
+                    TiledMapObject obj = layer.Objects[0];
+                    if (obj != null)
+                    {
+                        AnimatedTexture anim = new AnimatedTexture(Vector2.Zero, 0, 1, 1);
+                        anim.Load(Content, "key", 1, 1);
+                        goal = new Sprite();
+                        goal.Add(anim, 0, 5);
+                        goal.position = new Vector2(obj.Position.X, obj.Position.Y);
+                    }
+                } */
+
+                if (layer.Name == "Pickups")
+                {
+                    TiledMapObject obj = layer.Objects[0];
+
+                    if (obj != null)
+                    {
+                        AnimatedTexture anim = new AnimatedTexture(Vector2.Zero, 0, 1, 1);
+                        anim.Load(Content, "coin", 1, 1);
+
+                        coin = new Sprite();
+                        coin.Add(anim, 0, 5);
+                        coin.position = new Vector2(obj.Position.X, obj.Position.Y);
+                    }
+                }
+
+            }
+
+            gameMusic = Content.Load<Song>("Music/Superhero_violin");
+            MediaPlayer.Play(gameMusic);
 
         }   
 
@@ -123,11 +176,19 @@ namespace Platformer
 
             player.Update(deltaTime);
 
+            foreach (Enemy e in enemies)
+            {
+                e.Update(deltaTime);
+            }
+
             camera.Position = player.Position - new Vector2(ScreenWidth / 2, ScreenHeight / 2);
 
             camera.Zoom = 1f;
 
             base.Update(gameTime);
+
+            MediaPlayer.Volume = 0.01f;
+
         }
 
 
@@ -158,14 +219,18 @@ namespace Platformer
                 GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0, 0f, -1f);
 
             spriteBatch.Begin(transformMatrix: viewMatrix);
-
             mapRenderer.Draw(map, ref viewMatrix, ref projectionMatrix);
-
             player.Draw(spriteBatch);
+
+            foreach (Enemy e in enemies)
+            {
+                e.Draw(spriteBatch);
+            }
+            coin.Draw(spriteBatch);
+
             spriteBatch.End();
 
             spriteBatch.Begin();
-
             spriteBatch.DrawString(berlinSans, "Score: " + score.ToString(), new Vector2(20, 20), Color.DarkOrange);
 
             for (int i = 0; i < lives; i++)

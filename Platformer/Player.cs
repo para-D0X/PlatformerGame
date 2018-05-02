@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -20,6 +21,9 @@ namespace Platformer
 
         Vector2 velocity = Vector2.Zero;
         Vector2 position = Vector2.Zero;
+
+        SoundEffect jumpSound;
+        SoundEffectInstance jumpSoundInstance;
 
         public Vector2 Position
         {
@@ -78,6 +82,7 @@ namespace Platformer
             {
                 acceleration.Y -= Game1.jumpImpulse;
                 this.isJumping = true;
+                jumpSoundInstance.Play();
             }
 
             velocity += acceleration * deltaTime;
@@ -155,8 +160,14 @@ namespace Platformer
 
         public void Load(ContentManager content)
         {
-            AnimatedTexture animation = new AnimatedTexture(Vector2.Zero, 0, 1, 1);
-            animation.Load(content, "walksheet2", 2, 10);   
+            AnimatedTexture animation = new AnimatedTexture(Vector2.Zero, 0, 0.7f, 1);
+            animation.Load(content, "walksheet", 2, 10);
+
+            jumpSound = content.Load<SoundEffect>("SFX/jumpsound2"); // all works now thanks
+            jumpSoundInstance = jumpSound.CreateInstance();
+
+            jumpSoundInstance.Volume = 0.3f;
+
             sprite.Add(animation, 0, -5);
             sprite.Pause();
         }
@@ -165,6 +176,8 @@ namespace Platformer
         {
             UpdateInput(deltaTime);
             sprite.Update(deltaTime);
+
+            Console.WriteLine(Position);
         }
 
         public void Draw(SpriteBatch spriteBatch)

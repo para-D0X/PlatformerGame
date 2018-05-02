@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/Music/Superhero_violin.ogg</SourceFile>
+  <SourceTime>2016-05-17T15:52:18+10:00</SourceTime>
+  <DestFile>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/bin/Windows/Music/Superhero_violin.xnb</DestFile>
+  <DestTime>2018-05-02T19:52:22.3311001+10:00</DestTime>
+  <Importer>OggImporter</Importer>
+  <ImporterTime>2017-03-02T02:05:36+11:00</ImporterTime>
+  <Processor>SongProcessor</Processor>
+  <ProcessorTime>2017-03-02T02:05:36+11:00</ProcessorTime>
+  <Parameters>
+    <Key>Quality</Key>
+    <Value>Best</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput>
+    <string>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/bin/Windows/Music/Superhero_violin.wma</string>
+  </BuildOutput>
+</PipelineBuildEvent>

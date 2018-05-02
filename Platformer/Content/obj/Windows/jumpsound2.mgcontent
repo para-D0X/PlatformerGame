@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SourceFile>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/jumpsound2.wav</SourceFile>
+  <SourceTime>2018-04-30T21:17:11.5686581+10:00</SourceTime>
+  <DestFile>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/bin/Windows/jumpsound2.xnb</DestFile>
+  <DestTime>2018-04-30T21:17:49.7398774+10:00</DestTime>
+  <Importer>WavImporter</Importer>
+  <ImporterTime>2017-03-02T02:05:36+11:00</ImporterTime>
+  <Processor>SoundEffectProcessor</Processor>
+  <ProcessorTime>2017-03-02T02:05:36+11:00</ProcessorTime>
+  <Parameters>
+    <Key>Quality</Key>
+    <Value>Best</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>
