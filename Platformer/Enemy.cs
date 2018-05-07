@@ -53,8 +53,9 @@ namespace Platformer
             AnimatedTexture animation = new AnimatedTexture(Vector2.Zero, 0, 1, 1);
             animation.Load(content, "zombie", 1, 5);
 
-            sprite.Add(animation, 16, 0);
+            sprite.Add(animation, 0, -23); 
         }
+
 
         public void Update(float deltaTime)
         {

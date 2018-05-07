@@ -68,12 +68,10 @@ namespace Platformer
 
         public Rectangle Bounds
         {
-            get
+            get // ive just followed the material
             {
                 return new Rectangle(new Point((int)position.X, (int)position.Y), animations[currentAnimation].FrameSize);
             }
         }
-        // lets do this
-
     }
 }

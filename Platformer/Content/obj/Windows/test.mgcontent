@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <SourceFile>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/test.tmx</SourceFile>
-  <SourceTime>2018-05-02T21:08:28.2130657+10:00</SourceTime>
+  <SourceTime>2018-05-02T21:44:41.7295742+10:00</SourceTime>
   <DestFile>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/bin/Windows/test.xnb</DestFile>
-  <DestTime>2018-05-02T21:12:56.0781876+10:00</DestTime>
+  <DestTime>2018-05-02T21:44:45.3323128+10:00</DestTime>
   <Importer>TiledMapImporter</Importer>
   <ImporterTime>2017-12-11T04:41:22+11:00</ImporterTime>
   <Processor>TiledMapProcessor</Processor>

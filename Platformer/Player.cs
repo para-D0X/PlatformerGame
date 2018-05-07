@@ -25,6 +25,40 @@ namespace Platformer
         SoundEffect jumpSound;
         SoundEffectInstance jumpSoundInstance;
 
+
+        bool autoJump = true;
+
+        public Vector2 Velocity
+        {
+            get
+            {
+                return velocity;
+            }
+        }
+
+        public Rectangle Bounds
+        {
+            get
+            {
+                return sprite.Bounds;
+            }
+        }
+
+        public bool IsJumping
+        {
+            get
+            {
+                return isJumping;
+            }
+        }
+
+        public void JumpOnCollision()
+        {
+            autoJump = true;
+        }
+
+
+
         public Vector2 Position
         {
             get
@@ -78,8 +112,9 @@ namespace Platformer
                 acceleration.X -= Game1.friction;
             }
 
-            if (state.IsKeyDown(Keys.W) == true && this.isJumping == false && falling == false)
+            if ((state.IsKeyDown(Keys.W) == true && this.isJumping == false && falling == false) || autoJump == true)
             {
+                autoJump = false;
                 acceleration.Y -= Game1.jumpImpulse;
                 this.isJumping = true;
                 jumpSoundInstance.Play();
@@ -171,6 +206,7 @@ namespace Platformer
             sprite.Add(animation, 0, -5);
             sprite.Pause();
         }
+  
 
         public void Update(float deltaTime)
         {
@@ -184,7 +220,6 @@ namespace Platformer
         {
             sprite.Draw(spriteBatch, position);
         }
-
 
 
 

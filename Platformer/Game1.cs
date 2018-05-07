@@ -156,26 +156,54 @@ namespace Platformer
             gameMusic = Content.Load<Song>("Music/Superhero_violin");
             MediaPlayer.Play(gameMusic);
 
-        }   
-
-       
+        }          
 
         protected override void UnloadContent()
         {
             
         }
 
+        private void CheckCollisions()
+        {
+            foreach (Enemy e in enemies)
+            {
+                if (IsColliding(player.Bounds, e.Bounds) == true)
+                {
+                    if (player.IsJumping && player.Velocity.Y > 0)
+                    {
+                        player.JumpOnCollision();
+                        enemies.Remove(e);
+                        break;
+                    }
+                    else
+                    {
+                        //player takes damage
+                    }
+                }
+            }
+        }
 
-      
+        private bool IsColliding(Rectangle rect1, Rectangle rect2)
+        {
+            if (rect1.X + rect1.Width < rect2.X ||
+                rect1.X > rect2.X + rect2.Width ||
+                rect1.Y + rect1.Height < rect2.Y ||
+                rect1.Y > rect2.Y + rect2.Height)
+            {
+                // these two rectangles are not colliding;
+                return false;
+            }
+            Console.WriteLine("Something is colliding");
+            return true;
+        }
+
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
             player.Update(deltaTime);
-
             foreach (Enemy e in enemies)
             {
                 e.Update(deltaTime);
@@ -185,6 +213,8 @@ namespace Platformer
 
             camera.Zoom = 1f;
 
+            CheckCollisions();
+
             base.Update(gameTime);
 
             MediaPlayer.Volume = 0.01f;
@@ -192,7 +222,6 @@ namespace Platformer
         }
 
 
-       
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -226,7 +255,7 @@ namespace Platformer
             {
                 e.Draw(spriteBatch);
             }
-            coin.Draw(spriteBatch); // YES
+            coin.Draw(spriteBatch);
 
             spriteBatch.End();
 
@@ -284,5 +313,9 @@ namespace Platformer
             collisionLayer.TryGetTile(tx, ty, out tile);
             return tile.Value.GlobalIdentifier;
         }
+
+
+
+
     }
 }
