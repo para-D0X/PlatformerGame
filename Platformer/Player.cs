@@ -63,7 +63,7 @@ namespace Platformer
         {
             get
             {
-                return position;
+                return sprite.position;
             }
             set
             {
@@ -125,7 +125,7 @@ namespace Platformer
             velocity.X = MathHelper.Clamp(velocity.X, -Game1.maxVelocity.X, Game1.maxVelocity.X);
             velocity.Y = MathHelper.Clamp(velocity.Y, -Game1.maxVelocity.Y, Game1.maxVelocity.Y);
 
-            position += velocity * deltaTime;
+            sprite.position += velocity * deltaTime;
 
             if ((wasMovingLeft && (velocity.X > 0)) || (wasMovingRight && (velocity.X < 0)))
             {
@@ -135,12 +135,12 @@ namespace Platformer
 
             // COLLISION DETECTION
 
-            int tx = game.PixelToTile(position.X);
-            int ty = game.PixelToTile(position.Y);
+            int tx = game.PixelToTile(sprite.position.X);
+            int ty = game.PixelToTile(sprite.position.Y);
 
-            bool nx = (position.X) % Game1.tile != 0;
+            bool nx = (sprite.position.X) % Game1.tile != 0;
 
-            bool ny = (position.Y) % Game1.tile != 0;
+            bool ny = (sprite.position.Y) % Game1.tile != 0;
 
             bool cell = game.CellAtTileCoord(tx, ty) != 0;
             bool cellright = game.CellAtTileCoord(tx + 1, ty) != 0;
@@ -151,7 +151,7 @@ namespace Platformer
             {
                 if ((celldown && !cell) || (celldiag && !cellright && nx))
                 {
-                    position.Y = game.TileToPixel(ty);
+                    sprite.position.Y = game.TileToPixel(ty);
                     this.velocity.Y = 0;
                     this.isFalling = false;
                     this.isJumping = false;
@@ -163,7 +163,7 @@ namespace Platformer
             {
                 if ((cell && !celldown) || (cellright && !celldiag && nx))
                 {
-                    position.Y = game.TileToPixel(ty + 1);
+                    sprite.position.Y = game.TileToPixel(ty + 1);
                     this.velocity.Y = 0;
                     cell = celldown;
                     cellright = celldiag;
@@ -175,7 +175,7 @@ namespace Platformer
             {
                 if ((cellright && !cell) || (celldiag && !celldown && ny))
                 {
-                    position.X = game.TileToPixel(tx);
+                    sprite.position.X = game.TileToPixel(tx);
                     this.velocity.X = 0;
                     sprite.Pause();
                 }
@@ -184,7 +184,7 @@ namespace Platformer
             {
                 if ((cell && !cellright) || (celldown && !celldiag && ny))
                 {
-                    position.X = game.TileToPixel(tx + 1);
+                    sprite.position.X = game.TileToPixel(tx + 1);
                     this.velocity.X = 0;
                     sprite.Pause();
                 }
@@ -213,12 +213,12 @@ namespace Platformer
             UpdateInput(deltaTime);
             sprite.Update(deltaTime);
 
-            Console.WriteLine(Position);
+            Console.WriteLine(sprite.position);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            sprite.Draw(spriteBatch, position);
+            sprite.Draw(spriteBatch, sprite.position);
         }
 
 

@@ -75,7 +75,7 @@ namespace Platformer
         protected override void Initialize()
         {
             player = new Player(this);
-            player.Position = new Vector2(0, 0); //(360, 1200) wanted spawn location
+            player.Position = new Vector2(430, 1200);
             base.Initialize();
         }
 
@@ -179,11 +179,12 @@ namespace Platformer
                     {
                         player.JumpOnCollision();
                         enemies.Remove(e);
+                        score += 1;
                         break;
                     }
                     else
                     {
-                        //player takes damage
+                        lives -= 1;
                     }
                 }
             }
