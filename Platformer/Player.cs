@@ -198,15 +198,15 @@ namespace Platformer
             AnimatedTexture animation = new AnimatedTexture(Vector2.Zero, 0, 0.7f, 1);
             animation.Load(content, "walksheet", 2, 10);
 
-            jumpSound = content.Load<SoundEffect>("SFX/jumpsound2"); // all works now thanks
-            jumpSoundInstance = jumpSound.CreateInstance();
+            jumpSound = content.Load<SoundEffect>("SFX/jumpsound2");
+            jumpSoundInstance = jumpSound.CreateInstance(); 
 
             jumpSoundInstance.Volume = 0.3f;
 
             sprite.Add(animation, 0, -5);
             sprite.Pause();
         }
-  
+
 
         public void Update(float deltaTime)
         {

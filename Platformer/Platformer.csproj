@@ -44,14 +44,10 @@
     <Compile Include="AnimatedTexture.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="GameOverState.cs" />
-    <Compile Include="GameState.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SplashState.cs" />
     <Compile Include="Sprite.cs" />
-    <Compile Include="StateManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Extended, Version=1.0.617.0, Culture=neutral, processorArchitecture=MSIL">

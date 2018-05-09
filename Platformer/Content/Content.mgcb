@@ -266,3 +266,15 @@
 /processorParam:TextureFormat=Color
 /build:zombie.png
 
+#begin startupJingle.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:startupJingle.wav
+
+#begin gameStartSound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:gameStartSound.wav
+

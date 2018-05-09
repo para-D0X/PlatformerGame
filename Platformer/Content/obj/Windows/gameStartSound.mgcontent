@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/SFX/Jump.wav</SourceFile>
-  <SourceTime>2016-05-27T13:17:15.6877576+10:00</SourceTime>
-  <DestFile>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/bin/Windows/SFX/Jump.xnb</DestFile>
-  <DestTime>2018-05-09T20:21:43.5714722+10:00</DestTime>
+  <SourceFile>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/gameStartSound.wav</SourceFile>
+  <SourceTime>2018-05-09T20:27:20.9488849+10:00</SourceTime>
+  <DestFile>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/bin/Windows/gameStartSound.xnb</DestFile>
+  <DestTime>2018-05-09T20:27:41.1869099+10:00</DestTime>
   <Importer>WavImporter</Importer>
   <ImporterTime>2017-03-02T02:05:36+11:00</ImporterTime>
   <Processor>SoundEffectProcessor</Processor>

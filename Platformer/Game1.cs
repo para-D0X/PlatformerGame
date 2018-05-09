@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 using MonoGame.Extended;
 using MonoGame.Extended.Tiled;
 using MonoGame.Extended.Tiled.Graphics;
@@ -31,7 +32,7 @@ namespace Platformer
         TiledMap map = null;
         TiledMapRenderer mapRenderer = null;
         TiledMapTileLayer collisionLayer;
-
+        
         SpriteFont berlinSans;
         int score = 0;
         int lives = 3;
@@ -39,10 +40,32 @@ namespace Platformer
         Texture2D heart = null;
 
         Song gameMusic;
+        SoundEffect splashSound;
+        SoundEffect startGameSound;
+
+        SoundEffectInstance splashSoundInstance; 
+        SoundEffectInstance startGameSoundInstance;
 
         List<Enemy> enemies = new List<Enemy>();
-       // Sprite goal = null;
+        // Sprite goal = null;
         Sprite coin = null;
+
+        Texture2D backgroundTexture;
+        Texture2D kermitTexture;
+
+        float Timer = 3;
+        bool RunOnce = false;
+        bool PlayOnce = false;
+
+        // STATES
+
+        const int STATE_SPLASH = 0;
+        const int STATE_MENU = 1;
+        const int STATE_GAME = 2;
+        const int STATE_WIN = 3;
+        const int STATE_LOSE = 4;
+
+        int GameState = STATE_SPLASH;
 
         public int ScreenWidth
         {
@@ -60,27 +83,21 @@ namespace Platformer
             }
         }
 
-        Texture2D backgroundTexture;
-        Texture2D kermitTexture;
-
-
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
 
-
-
         protected override void Initialize()
         {
+            GameState = STATE_SPLASH;
+
             player = new Player(this);
             player.Position = new Vector2(430, 1200);
             base.Initialize();
         }
 
-
-       
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -88,13 +105,19 @@ namespace Platformer
             backgroundTexture = Content.Load<Texture2D>("background1");
             kermitTexture = Content.Load<Texture2D>("kermitslurp");
 
+            splashSound = Content.Load<SoundEffect>("startupJingle");
+            startGameSound = Content.Load<SoundEffect>("gameStartSound");
+
+            splashSoundInstance = splashSound.CreateInstance();
+            startGameSoundInstance = startGameSound.CreateInstance();
+
             player.Load(Content);
 
             berlinSans = Content.Load<SpriteFont>("berlinsansfb");
             heart = Content.Load<Texture2D>("heart");
 
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice,
-                ScreenWidth, ScreenHeight); 
+                ScreenWidth, ScreenHeight);
 
             camera = new Camera2D(viewportAdapter);
             camera.Position = new Vector2(0, ScreenHeight);
@@ -150,17 +173,16 @@ namespace Platformer
                         coin.position = new Vector2(obj.Position.X, obj.Position.Y);
                     }
                 }
-
             }
 
             gameMusic = Content.Load<Song>("Music/Superhero_violin");
-            MediaPlayer.Play(gameMusic);
+            MediaPlayer.Play(gameMusic); 
 
-        }          
+        }
 
         protected override void UnloadContent()
         {
-            
+
         }
 
         private void CheckCollisions()
@@ -179,6 +201,11 @@ namespace Platformer
                     else
                     {
                         lives -= 1;
+                        if (lives == 0)
+                        {
+                            GameState = STATE_LOSE;
+                            MediaPlayer.Stop();
+                        }
                     }
                 }
             }
@@ -203,11 +230,61 @@ namespace Platformer
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             player.Update(deltaTime);
 
+            switch (GameState)
+            {
+                case STATE_SPLASH:
+                    UpdateSplashState(deltaTime);
+                    break;
+                case STATE_MENU:
+                    UpdateMenuState(deltaTime);
+                    break;
+                case STATE_GAME:
+                    UpdateGameState(deltaTime);
+                    break;
+                case STATE_WIN:
+                    UpdateMenuState(deltaTime);
+                    break;
+                case STATE_LOSE:
+                    UpdateLoseState(deltaTime);
+                    break;
+            }
 
+
+            base.Update(gameTime);
+        }
+
+        private void UpdateSplashState(float deltaTime)
+        {
+            Timer -= deltaTime;
+
+            if(Timer <= 0)
+            {
+                GameState = STATE_MENU;
+            }
+
+            MediaPlayer.Volume = 0.01f;
+
+            if(PlayOnce != true)
+            {
+                splashSoundInstance.Play();
+                PlayOnce = true;
+            }
+
+
+
+
+        }
+
+        private void DrawSplashState(SpriteBatch spriteBatch)
+        {
+
+        }
+
+        private void UpdateGameState(float deltaTime)
+        {
             foreach (Enemy e in enemies)
             {
                 e.Update(deltaTime);
@@ -218,17 +295,11 @@ namespace Platformer
 
             CheckCollisions();
 
-            base.Update(gameTime);
-
             MediaPlayer.Volume = 0.01f;
+        }
 
-        } 
-
-        protected override void Draw(GameTime gameTime)
+        private void DrawGameState(SpriteBatch spriteBatch)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            spriteBatch.Begin();
 
             int tileWidth = (graphics.GraphicsDevice.Viewport.Width / backgroundTexture.Width) + 1;
             int tileHeight = (graphics.GraphicsDevice.Viewport.Height / backgroundTexture.Height) + 1;
@@ -267,6 +338,80 @@ namespace Platformer
             for (int i = 0; i < lives; i++)
             {
                 spriteBatch.Draw(heart, new Vector2(ScreenWidth - 80 - i * 55, 20), Color.White);
+            }
+
+        }
+
+        private void UpdateMenuState(float deltaTime)
+        {
+            if (PlayOnce != false)
+            {
+                PlayOnce = false;
+            }
+
+            KeyboardState state = Keyboard.GetState();
+
+            if (state.IsKeyDown(Keys.Enter) == true)
+            {
+                GameState = STATE_GAME;
+                if (PlayOnce != true)
+                {
+                    startGameSound.Play();
+                    PlayOnce = true;
+                }
+            }
+        }
+
+        private void DrawMenuState(SpriteBatch spriteBatch)
+        {
+            spriteBatch.DrawString(berlinSans, "Press Enter To Begin Game", new Vector2(ScreenWidth / 3, ScreenHeight / 2), Color.Black);
+        }
+
+        private void UpdateWinState(float deltaTime)
+        {
+
+        }
+
+        private void DrawWinState(SpriteBatch spriteBatch)
+        {
+
+        }
+
+        private void UpdateLoseState(float deltaTime)
+        {
+
+        }
+
+        private void DrawLoseState(SpriteBatch spriteBatch)
+        {
+            spriteBatch.DrawString(berlinSans, "You died dead, FeelsBadMan", new Vector2(ScreenWidth / 3, ScreenHeight / 2), Color.Black);
+
+        }
+
+
+        protected override void Draw(GameTime gameTime)
+        {
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            spriteBatch.Begin();
+
+            switch (GameState)
+            {
+                case STATE_SPLASH:
+                    DrawSplashState(spriteBatch);
+                    break;
+                case STATE_MENU:
+                    DrawMenuState(spriteBatch);
+                    break;
+                case STATE_GAME:
+                    DrawGameState(spriteBatch);
+                    break;
+                case STATE_WIN:
+                    DrawMenuState(spriteBatch);
+                    break;
+                case STATE_LOSE:
+                    DrawLoseState(spriteBatch);
+                    break;
             }
 
             spriteBatch.End();
@@ -315,9 +460,5 @@ namespace Platformer
             collisionLayer.TryGetTile(tx, ty, out tile);
             return tile.Value.GlobalIdentifier;
         }
-
-
-
-
     }
 }
