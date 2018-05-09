@@ -85,12 +85,6 @@ namespace Platformer
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            AIE.StateManager.CreateState("SPLASH", new SplashState());
-            AIE.StateManager.CreateState("GAME", new GameState());
-            AIE.StateManager.CreateState("GAMEOVER", new GameOverState());
-
-            AIE.StateManager.PushState("SPLASH");
-
             backgroundTexture = Content.Load<Texture2D>("background1");
             kermitTexture = Content.Load<Texture2D>("kermitslurp");
 
@@ -209,7 +203,6 @@ namespace Platformer
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            AIE.StateManager.Update(Content, gameTime);
 
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             player.Update(deltaTime);
@@ -229,14 +222,11 @@ namespace Platformer
 
             MediaPlayer.Volume = 0.01f;
 
-        }
-
+        } 
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            AIE.StateManager.Draw(spriteBatch);
 
             spriteBatch.Begin();
 
