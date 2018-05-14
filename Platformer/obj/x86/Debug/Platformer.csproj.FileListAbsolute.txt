@@ -91,3 +91,4 @@ C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\
 C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\zombie.xnb
 C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\gameStartSound.xnb
 C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\startupJingle.xnb
+C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\splash.xnb

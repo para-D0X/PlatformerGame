@@ -38,6 +38,7 @@ namespace Platformer
         int lives = 3;
 
         Texture2D heart = null;
+        Texture2D splash = null;
 
         Song gameMusic;
         SoundEffect splashSound;
@@ -115,6 +116,7 @@ namespace Platformer
 
             berlinSans = Content.Load<SpriteFont>("berlinsansfb");
             heart = Content.Load<Texture2D>("heart");
+            splash = Content.Load<Texture2D>("splash");
 
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice,
                 ScreenWidth, ScreenHeight);
@@ -146,19 +148,6 @@ namespace Platformer
                     }
                 }
 
-                /*if (layer.Name == "Goal")
-                {
-                    TiledMapObject obj = layer.Objects[0];
-                    if (obj != null)
-                    {
-                        AnimatedTexture anim = new AnimatedTexture(Vector2.Zero, 0, 1, 1);
-                        anim.Load(Content, "key", 1, 1);
-                        goal = new Sprite();
-                        goal.Add(anim, 0, 5);
-                        goal.position = new Vector2(obj.Position.X, obj.Position.Y);
-                    }
-                } */
-
                 if (layer.Name == "Pickups")
                 {
                     TiledMapObject obj = layer.Objects[0];
@@ -176,7 +165,7 @@ namespace Platformer
             }
 
             gameMusic = Content.Load<Song>("Music/Superhero_violin");
-            MediaPlayer.Play(gameMusic); 
+
 
         }
 
@@ -273,14 +262,11 @@ namespace Platformer
                 PlayOnce = true;
             }
 
-
-
-
         }
 
         private void DrawSplashState(SpriteBatch spriteBatch)
         {
-
+            spriteBatch.Draw(splash, new Vector2(0, 0),null,Color.White);
         }
 
         private void UpdateGameState(float deltaTime)
@@ -294,6 +280,7 @@ namespace Platformer
             camera.Zoom = 1f;
 
             CheckCollisions();
+
 
             MediaPlayer.Volume = 0.01f;
         }
@@ -348,6 +335,9 @@ namespace Platformer
             {
                 PlayOnce = false;
             }
+
+            MediaPlayer.Play(gameMusic);
+            MediaPlayer.Volume = 0; // DO NOT CHANGE, MEGA DEAF IF YOU DO
 
             KeyboardState state = Keyboard.GetState();
 
