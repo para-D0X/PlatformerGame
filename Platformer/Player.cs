@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using ParticleEffects;
 
 namespace Platformer
 {
@@ -25,6 +26,9 @@ namespace Platformer
         SoundEffect jumpSound;
         SoundEffectInstance jumpSoundInstance;
 
+        Emitter dustEmitter = null;
+        Texture2D dustParticle = null;
+        Vector2 emitterOffset = new Vector2(25, 70);
 
         bool autoJump = true;
 
@@ -199,7 +203,10 @@ namespace Platformer
             animation.Load(content, "walksheet", 2, 10);
 
             jumpSound = content.Load<SoundEffect>("SFX/jumpsound2");
-            jumpSoundInstance = jumpSound.CreateInstance(); 
+            jumpSoundInstance = jumpSound.CreateInstance();
+
+            dustParticle = content.Load<Texture2D>("dustParticle");
+            dustEmitter = new Emitter(dustParticle, sprite.position);
 
             jumpSoundInstance.Volume = 0.3f;
 
@@ -213,11 +220,33 @@ namespace Platformer
             UpdateInput(deltaTime);
             sprite.Update(deltaTime);
 
-            Console.WriteLine(sprite.position);
+            KeyboardState state = Keyboard.GetState();
+
+            if (state.IsKeyDown(Keys.A) || (state.IsKeyDown(Keys.D) == true))
+            {
+                if(isJumping == false)
+                {
+                    dustEmitter.position = sprite.position + emitterOffset;
+                    dustEmitter.emissionRate = 30;
+                    dustEmitter.transparency = 0.7f;
+                    dustEmitter.minSize = 10;
+                    dustEmitter.maxSize = 15;
+                    dustEmitter.maxLife = 1.0f;
+                }
+
+            }
+            else
+            {
+                dustEmitter.position = new Vector2(-100, -100);
+            }
+
+            dustEmitter.Update(deltaTime);
+
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
+            dustEmitter.Draw(spriteBatch);
             sprite.Draw(spriteBatch, sprite.position);
         }
 

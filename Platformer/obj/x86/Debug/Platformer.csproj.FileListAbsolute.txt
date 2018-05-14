@@ -92,3 +92,8 @@ C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\
 C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\gameStartSound.xnb
 C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\startupJingle.xnb
 C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\splash.xnb
+C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\dustParticle.xnb
+C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\footstep.xnb
+C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\pop.xnb
+C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\splash2.xnb
+C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\fartCloud.xnb

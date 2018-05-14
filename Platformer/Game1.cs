@@ -9,6 +9,7 @@ using MonoGame.Extended.Tiled.Graphics;
 using MonoGame.Extended.ViewportAdapters;
 using System;
 using System.Collections.Generic;
+using ParticleEffects;
 
 namespace Platformer
 {
@@ -43,9 +44,11 @@ namespace Platformer
         Song gameMusic;
         SoundEffect splashSound;
         SoundEffect startGameSound;
+        SoundEffect killZombieSound;
 
         SoundEffectInstance splashSoundInstance; 
         SoundEffectInstance startGameSoundInstance;
+        SoundEffectInstance killZombieSoundInstance;
 
         List<Enemy> enemies = new List<Enemy>();
         // Sprite goal = null;
@@ -54,7 +57,12 @@ namespace Platformer
         Texture2D backgroundTexture;
         Texture2D kermitTexture;
 
+        Emitter fartEmitter = null;
+        Texture2D fartParticle = null;
+        Vector2 emitterOffset = new Vector2(25, 30);      
+
         float Timer = 3;
+        float popTimer = 1;
         bool RunOnce = false;
         bool PlayOnce = false;
 
@@ -108,15 +116,21 @@ namespace Platformer
 
             splashSound = Content.Load<SoundEffect>("startupJingle");
             startGameSound = Content.Load<SoundEffect>("gameStartSound");
+            killZombieSound = Content.Load<SoundEffect>("pop");
 
             splashSoundInstance = splashSound.CreateInstance();
             startGameSoundInstance = startGameSound.CreateInstance();
+            killZombieSoundInstance = killZombieSound.CreateInstance();
 
             player.Load(Content);
 
+            fartParticle = Content.Load<Texture2D>("fartCloud");
+            fartEmitter = new Emitter(fartParticle, new Vector2 (-100, -100));
+
             berlinSans = Content.Load<SpriteFont>("berlinsansfb");
             heart = Content.Load<Texture2D>("heart");
-            splash = Content.Load<Texture2D>("splash");
+            splash = Content.Load<Texture2D>("splash2");
+
 
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice,
                 ScreenWidth, ScreenHeight);
@@ -185,6 +199,9 @@ namespace Platformer
                         player.JumpOnCollision();
                         enemies.Remove(e);
                         score += 1;
+                        killZombieSound.Play();
+                        popTimer = 1;
+                        fartEmitter.position = e.Position + emitterOffset;
                         break;
                     }
                     else
@@ -222,6 +239,8 @@ namespace Platformer
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             player.Update(deltaTime);
 
+
+
             switch (GameState)
             {
                 case STATE_SPLASH:
@@ -241,6 +260,7 @@ namespace Platformer
                     break;
             }
 
+            fartEmitter.Update(deltaTime);
 
             base.Update(gameTime);
         }
@@ -256,7 +276,9 @@ namespace Platformer
 
             MediaPlayer.Volume = 0.01f;
 
-            if(PlayOnce != true)
+            splashSoundInstance.Volume = 0.4f;
+
+            if (PlayOnce != true)
             {
                 splashSoundInstance.Play();
                 PlayOnce = true;
@@ -266,7 +288,7 @@ namespace Platformer
 
         private void DrawSplashState(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(splash, new Vector2(0, 0),null,Color.White);
+            spriteBatch.Draw(splash, new Vector2(0, -5),null,Color.White, 0f, Vector2.Zero, 0.44f, SpriteEffects.None, 0f);
         }
 
         private void UpdateGameState(float deltaTime)
@@ -281,8 +303,23 @@ namespace Platformer
 
             CheckCollisions();
 
-
+            killZombieSoundInstance.Volume = 0.02f;
             MediaPlayer.Volume = 0.01f;
+
+            popTimer -= deltaTime;
+
+            if (popTimer >= 0)
+            {               
+                fartEmitter.emissionRate = 50;
+                fartEmitter.transparency = 0.9f;
+                fartEmitter.minSize = 30;
+                fartEmitter.maxSize = 40;
+                fartEmitter.maxLife = 1.5f;
+            }
+            else
+            {
+                fartEmitter.position = new Vector2(-100, -100);
+            }
         }
 
         private void DrawGameState(SpriteBatch spriteBatch)
@@ -316,6 +353,7 @@ namespace Platformer
                 e.Draw(spriteBatch);
             }
             coin.Draw(spriteBatch);
+            fartEmitter.Draw(spriteBatch);
 
             spriteBatch.End();
 
@@ -340,6 +378,8 @@ namespace Platformer
             MediaPlayer.Volume = 0; // DO NOT CHANGE, MEGA DEAF IF YOU DO
 
             KeyboardState state = Keyboard.GetState();
+
+            startGameSoundInstance.Volume = 0.5f;
 
             if (state.IsKeyDown(Keys.Enter) == true)
             {
