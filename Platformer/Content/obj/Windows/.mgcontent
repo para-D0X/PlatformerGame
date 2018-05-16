@@ -38,5 +38,13 @@
     <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/footstep.wav</File>
     <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/splash2.png</File>
     <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/fartCloud.png</File>
+    <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/pressentertoplay.png</File>
+    <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/wasdtoplay.png</File>
+    <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/greybackdrop.png</File>
+    <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/youwin.png</File>
+    <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/coinpickup.wav</File>
+    <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/losesound.wav</File>
+    <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/youwinsound.wav</File>
+    <File>C:/Users/owner/Documents/GitHub/PlatformerGame/Platformer/Content/score.png</File>
   </SourceFiles>
 </SourceFileCollection>

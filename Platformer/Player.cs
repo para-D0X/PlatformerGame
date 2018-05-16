@@ -224,7 +224,7 @@ namespace Platformer
 
             if (state.IsKeyDown(Keys.A) || (state.IsKeyDown(Keys.D) == true))
             {
-                if(isJumping == false)
+                if(isFalling == false)
                 {
                     dustEmitter.position = sprite.position + emitterOffset;
                     dustEmitter.emissionRate = 30;

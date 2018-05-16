@@ -33,25 +33,38 @@ namespace Platformer
         TiledMap map = null;
         TiledMapRenderer mapRenderer = null;
         TiledMapTileLayer collisionLayer;
-        
+
         SpriteFont berlinSans;
         int score = 0;
         int lives = 3;
 
         Texture2D heart = null;
         Texture2D splash = null;
+        Texture2D pressEnter = null;
+        Texture2D controls = null;
+        Texture2D greyBackground = null;
+        Texture2D youWon = null;
+        Texture2D scoreImage = null;
 
         Song gameMusic;
         SoundEffect splashSound;
         SoundEffect startGameSound;
         SoundEffect killZombieSound;
+        SoundEffect coinPickupSound;
+        SoundEffect youWinSound;
+        SoundEffect loseSound;
 
-        SoundEffectInstance splashSoundInstance; 
+        SoundEffectInstance splashSoundInstance;
         SoundEffectInstance startGameSoundInstance;
         SoundEffectInstance killZombieSoundInstance;
+        SoundEffectInstance coinPickupSoundInstance;
+        SoundEffectInstance youWinSoundInstance;
+        SoundEffectInstance loseSoundInstance;
+
+        Rectangle GoalRec = new Rectangle(2670, 70, 110, 300);
 
         List<Enemy> enemies = new List<Enemy>();
-        // Sprite goal = null;
+        List<Coins> coins = new List<Coins>();
         Sprite coin = null;
 
         Texture2D backgroundTexture;
@@ -59,7 +72,7 @@ namespace Platformer
 
         Emitter fartEmitter = null;
         Texture2D fartParticle = null;
-        Vector2 emitterOffset = new Vector2(25, 30);      
+        Vector2 emitterOffset = new Vector2(25, 30);
 
         float Timer = 3;
         float popTimer = 1;
@@ -117,19 +130,30 @@ namespace Platformer
             splashSound = Content.Load<SoundEffect>("startupJingle");
             startGameSound = Content.Load<SoundEffect>("gameStartSound");
             killZombieSound = Content.Load<SoundEffect>("pop");
+            coinPickupSound = Content.Load<SoundEffect>("coinpickup");
+            youWinSound = Content.Load<SoundEffect>("youwinsound");
+            loseSound = Content.Load<SoundEffect>("losesound");
 
             splashSoundInstance = splashSound.CreateInstance();
             startGameSoundInstance = startGameSound.CreateInstance();
             killZombieSoundInstance = killZombieSound.CreateInstance();
+            coinPickupSoundInstance = coinPickupSound.CreateInstance();
+            youWinSoundInstance = youWinSound.CreateInstance();
+            loseSoundInstance = loseSound.CreateInstance();
 
             player.Load(Content);
 
             fartParticle = Content.Load<Texture2D>("fartCloud");
-            fartEmitter = new Emitter(fartParticle, new Vector2 (-100, -100));
+            fartEmitter = new Emitter(fartParticle, new Vector2(-100, -100));
 
             berlinSans = Content.Load<SpriteFont>("berlinsansfb");
             heart = Content.Load<Texture2D>("heart");
             splash = Content.Load<Texture2D>("splash2");
+            pressEnter = Content.Load<Texture2D>("pressentertoplay");
+            controls = Content.Load<Texture2D>("wasdtoplay");
+            greyBackground = Content.Load<Texture2D>("greybackdrop");
+            youWon = Content.Load<Texture2D>("youwin");
+            scoreImage = Content.Load<Texture2D>("score");
 
 
             var viewportAdapter = new BoxingViewportAdapter(Window, GraphicsDevice,
@@ -159,21 +183,17 @@ namespace Platformer
                         enemy.Load(Content);
                         enemy.Position = new Vector2(obj.Position.X, obj.Position.Y);
                         enemies.Add(enemy);
-                    }
+                    } 
                 }
 
                 if (layer.Name == "Pickups")
                 {
-                    TiledMapObject obj = layer.Objects[0];
-
-                    if (obj != null)
+                    foreach (TiledMapObject obj in layer.Objects)
                     {
-                        AnimatedTexture anim = new AnimatedTexture(Vector2.Zero, 0, 1, 1);
-                        anim.Load(Content, "coin", 1, 1);
-
-                        coin = new Sprite();
-                        coin.Add(anim, 0, 5);
-                        coin.position = new Vector2(obj.Position.X, obj.Position.Y);
+                        Coins coin = new Coins(this);
+                        coin.Load(Content);
+                        coin.Position = new Vector2(obj.Position.X, obj.Position.Y);
+                        coins.Add(coin);
                     }
                 }
             }
@@ -194,26 +214,42 @@ namespace Platformer
             {
                 if (IsColliding(player.Bounds, e.Bounds) == true)
                 {
-                    if (player.IsJumping && player.Velocity.Y > 0)
+                    if (player.Velocity.Y > 0)
                     {
                         player.JumpOnCollision();
                         enemies.Remove(e);
                         score += 1;
-                        killZombieSound.Play();
+                        killZombieSoundInstance.Play();
                         popTimer = 1;
                         fartEmitter.position = e.Position + emitterOffset;
                         break;
                     }
-                    else
+                    else if (damage == false)
                     {
-                        lives -= 1;
-                        if (lives == 0)
-                        {
-                            GameState = STATE_LOSE;
-                            MediaPlayer.Stop();
-                        }
+                        lives --;
+                        damage = true;
                     }
                 }
+            }
+            if (IsColliding(player.Bounds, GoalRec) == true)
+            {
+                GameState = STATE_WIN;
+            }
+
+            foreach (Coins c in coins)
+            {
+                if (IsColliding(player.Bounds, c.Bounds) == true)
+                {                  
+                    coins.Remove(c);
+                    coinPickupSoundInstance.Play();
+                    score += 1;
+                    break;
+                   
+                }
+            }
+            if (IsColliding(player.Bounds, GoalRec) == true)
+            {
+                GameState = STATE_WIN;
             }
         }
 
@@ -237,11 +273,20 @@ namespace Platformer
                 Exit();
 
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             player.Update(deltaTime);
+            resetDamage(deltaTime);
+            CheckLives();
+
+            KeyboardState state = Keyboard.GetState();
 
 
+            if (state.IsKeyDown(Keys.P)  == true)
+            {
+                GameState = STATE_WIN;
+            }
 
-            switch (GameState)
+                switch (GameState)
             {
                 case STATE_SPLASH:
                     UpdateSplashState(deltaTime);
@@ -253,7 +298,7 @@ namespace Platformer
                     UpdateGameState(deltaTime);
                     break;
                 case STATE_WIN:
-                    UpdateMenuState(deltaTime);
+                    UpdateWinState(deltaTime);
                     break;
                 case STATE_LOSE:
                     UpdateLoseState(deltaTime);
@@ -269,7 +314,7 @@ namespace Platformer
         {
             Timer -= deltaTime;
 
-            if(Timer <= 0)
+            if (Timer <= 0)
             {
                 GameState = STATE_MENU;
             }
@@ -288,28 +333,45 @@ namespace Platformer
 
         private void DrawSplashState(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(splash, new Vector2(0, -5),null,Color.White, 0f, Vector2.Zero, 0.44f, SpriteEffects.None, 0f);
+            spriteBatch.Draw(splash, new Vector2(0, -5), null, Color.White, 0f, Vector2.Zero, 0.44f, SpriteEffects.None, 0f);
         }
 
         private void UpdateGameState(float deltaTime)
         {
+
+            PlayOnce = false;
+
+
             foreach (Enemy e in enemies)
             {
                 e.Update(deltaTime);
             }
+
+            foreach (Coins c in coins)
+            {
+                c.Update(deltaTime);
+            }
+
+            Console.WriteLine(player.Position);
 
             camera.Position = player.Position - new Vector2(ScreenWidth / 2, ScreenHeight / 2);
             camera.Zoom = 1f;
 
             CheckCollisions();
 
-            killZombieSoundInstance.Volume = 0.02f;
+            killZombieSoundInstance.Volume = 0.2f;
+            coinPickupSoundInstance.Volume = 0.2f;
+            splashSoundInstance.Volume = 0.5f;
+            startGameSoundInstance.Volume = 0.5f;
+            youWinSoundInstance.Volume = 0.4f;
+            loseSoundInstance.Volume = 0.6f;
+
             MediaPlayer.Volume = 0.01f;
 
             popTimer -= deltaTime;
 
             if (popTimer >= 0)
-            {               
+            {
                 fartEmitter.emissionRate = 50;
                 fartEmitter.transparency = 0.9f;
                 fartEmitter.minSize = 30;
@@ -348,23 +410,32 @@ namespace Platformer
             mapRenderer.Draw(map, ref viewMatrix, ref projectionMatrix);
             player.Draw(spriteBatch);
 
+            //spriteBatch.DrawRectangle(GoalRec, Color.Red, 1f);
+
+
             foreach (Enemy e in enemies)
             {
                 e.Draw(spriteBatch);
             }
-            coin.Draw(spriteBatch);
+
+            foreach (Coins c in coins)
+            {
+                c.Draw(spriteBatch);
+            }
+
+
             fartEmitter.Draw(spriteBatch);
 
             spriteBatch.End();
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(berlinSans, "Score: " + score.ToString(), new Vector2(20, 20), Color.DarkOrange);
+            spriteBatch.Draw(scoreImage, new Vector2(0, 0), null, Color.White, 0f, Vector2.Zero, 0.15f, SpriteEffects.None, 0f);
+            spriteBatch.DrawString(berlinSans, score.ToString(), new Vector2(120, 20), Color.DarkOliveGreen);
 
             for (int i = 0; i < lives; i++)
             {
                 spriteBatch.Draw(heart, new Vector2(ScreenWidth - 80 - i * 55, 20), Color.White);
             }
-
         }
 
         private void UpdateMenuState(float deltaTime)
@@ -394,30 +465,54 @@ namespace Platformer
 
         private void DrawMenuState(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(berlinSans, "Press Enter To Begin Game", new Vector2(ScreenWidth / 3, ScreenHeight / 2), Color.Black);
+            spriteBatch.Draw(greyBackground, new Vector2(0, 0), null, Color.White, 0f, Vector2.Zero, 0.44f, SpriteEffects.None, 0f);
+
+            spriteBatch.Draw(pressEnter, new Vector2(ScreenWidth / 5, ScreenHeight / 3), null, Color.White, 0f, Vector2.Zero, 0.44f, SpriteEffects.None, 0f);
+
+            spriteBatch.Draw(controls, new Vector2(0, 300), null, Color.White, 0f, Vector2.Zero, 0.44f, SpriteEffects.None, 0f);
         }
 
         private void UpdateWinState(float deltaTime)
         {
+            MediaPlayer.Stop();
+
+            if (PlayOnce != true)
+            {
+                youWinSoundInstance.Play();
+                PlayOnce = true;
+            }
 
         }
 
         private void DrawWinState(SpriteBatch spriteBatch)
         {
+            GraphicsDevice.Clear(Color.Black);
+
+            spriteBatch.Draw(greyBackground, new Vector2(0, 0), null, Color.White, 0f, Vector2.Zero, 0.44f, SpriteEffects.None, 0f);
+
+            spriteBatch.Draw(youWon, new Vector2(ScreenWidth / 7, ScreenHeight / 4), null, Color.White, 0f, Vector2.Zero, 0.44f, SpriteEffects.None, 0f);
 
         }
 
         private void UpdateLoseState(float deltaTime)
         {
+            MediaPlayer.Stop();
+
+            if (PlayOnce != true)
+            {
+                loseSoundInstance.Play();
+                PlayOnce = true;
+            }
 
         }
 
         private void DrawLoseState(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(berlinSans, "You died dead, FeelsBadMan", new Vector2(ScreenWidth / 3, ScreenHeight / 2), Color.Black);
+            GraphicsDevice.Clear(Color.Black);
+
+            spriteBatch.DrawString(berlinSans, "You died dead, FeelsBadMan", new Vector2(ScreenWidth / 3, ScreenHeight / 2), Color.White);
 
         }
-
 
         protected override void Draw(GameTime gameTime)
         {
@@ -437,7 +532,7 @@ namespace Platformer
                     DrawGameState(spriteBatch);
                     break;
                 case STATE_WIN:
-                    DrawMenuState(spriteBatch);
+                    DrawWinState(spriteBatch);
                     break;
                 case STATE_LOSE:
                     DrawLoseState(spriteBatch);
@@ -448,6 +543,36 @@ namespace Platformer
 
             base.Draw(gameTime);
         }
+
+        private void CheckLives()
+        {
+            if (lives <= 0)
+            {
+                GameState = STATE_LOSE;
+                MediaPlayer.Stop();
+            }
+        }
+
+        private bool damage;
+
+        private float resetTime = 1;
+
+        private void resetDamage(float deltaTime)
+        {
+            if (damage == true)
+            {
+                resetTime -= deltaTime;
+                if (resetTime <= 0)
+                {
+                    damage = false;
+                    resetTime = 1;
+                }
+            }
+        }
+
+
+
+
 
         public int PixelToTile(float pixelCoord)
         {

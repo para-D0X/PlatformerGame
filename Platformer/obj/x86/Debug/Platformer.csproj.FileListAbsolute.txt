@@ -97,3 +97,11 @@ C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\
 C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\pop.xnb
 C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\splash2.xnb
 C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\fartCloud.xnb
+C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\greybackdrop.xnb
+C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\pressentertoplay.xnb
+C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\wasdtoplay.xnb
+C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\youwin.xnb
+C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\coinpickup.xnb
+C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\losesound.xnb
+C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\youwinsound.xnb
+C:\Users\owner\Documents\GitHub\PlatformerGame\Platformer\bin\Windows\x86\Debug\Content\score.xnb

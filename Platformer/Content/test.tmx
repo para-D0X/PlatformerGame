@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="41" height="22" tilewidth="70" tileheight="70" infinite="0" nextobjectid="43">
+<map version="1.0" tiledversion="1.1.4" orientation="orthogonal" renderorder="right-down" width="41" height="22" tilewidth="70" tileheight="70" infinite="0" nextobjectid="68">
  <tileset firstgid="1" name="tiles_spritesheet" tilewidth="70" tileheight="70" spacing="2" tilecount="156" columns="12">
   <image source="tiles_spritesheet.png" width="914" height="936"/>
  </tileset>
@@ -110,23 +110,28 @@
   <object id="42" x="1784" y="280"/>
  </objectgroup>
  <objectgroup color="#ffff00" name="Pickups">
-  <object id="13" x="1153.33" y="1140"/>
-  <object id="14" x="1574.67" y="1129.33"/>
-  <object id="15" x="2550.67" y="1266.67"/>
-  <object id="16" x="2485.33" y="1265.33"/>
-  <object id="17" x="2400" y="1270.67"/>
-  <object id="18" x="2090.67" y="984"/>
-  <object id="19" x="2324" y="984"/>
-  <object id="20" x="2812" y="860"/>
-  <object id="21" x="2137.33" y="713.333"/>
-  <object id="22" x="1482.67" y="702.667"/>
-  <object id="23" x="973.333" y="489.333"/>
-  <object id="24" x="1574.67" y="221.333"/>
-  <object id="25" x="1989.33" y="221.333"/>
-  <object id="26" x="2344" y="233.333"/>
-  <object id="28" x="2416" y="230.667"/>
-  <object id="29" x="2477.33" y="229.333"/>
-  <object id="31" x="906.061" y="1275.76"/>
+  <object id="44" x="908" y="1260"/>
+  <object id="45" x="1120" y="1120"/>
+  <object id="46" x="1608" y="1120"/>
+  <object id="47" x="1680" y="1120"/>
+  <object id="49" x="2310.67" y="1261.33"/>
+  <object id="50" x="2380" y="1260"/>
+  <object id="51" x="2449.33" y="1260"/>
+  <object id="52" x="2100" y="980"/>
+  <object id="53" x="2308" y="978.667"/>
+  <object id="54" x="2800" y="840"/>
+  <object id="55" x="2660" y="840"/>
+  <object id="56" x="2100" y="700"/>
+  <object id="57" x="1470.67" y="701.333"/>
+  <object id="58" x="980" y="488"/>
+  <object id="59" x="908" y="488"/>
+  <object id="60" x="629.333" y="348"/>
+  <object id="61" x="1120" y="210.667"/>
+  <object id="63" x="2309.33" y="209.333"/>
+  <object id="64" x="2378.67" y="209.333"/>
+  <object id="65" x="2448" y="208"/>
+  <object id="66" x="1960" y="210.667"/>
+  <object id="67" x="1540" y="210.667"/>
  </objectgroup>
  <objectgroup color="#00ff00" name="Finish">
   <object id="30" x="2689.33" y="225.333"/>
